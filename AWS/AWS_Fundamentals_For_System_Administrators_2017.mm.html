@@ -1,0 +1,2184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>AWS - Fundamentals For System Administrators (2017)</title>
+<style type="text/css">
+    li { list-style: none;  margin: 0; }
+    p { margin: 0; }
+    span.foldopened { color: white; font-size: xx-small;
+    border-width: 1; font-family: monospace; padding: 0em 0.25em 0em 0.25em; background: #e0e0e0;
+    VISIBILITY: visible;
+    cursor:pointer; }
+
+
+    span.foldclosed { color: #666666; font-size: xx-small;
+    border-width: 1; font-family: monospace; padding: 0em 0.25em 0em 0.25em; background: #e0e0e0;
+    VISIBILITY: hidden;
+    cursor:pointer; }
+
+    span.foldspecial { color: #666666; font-size: xx-small; border-style: none solid solid none;
+    border-color: #CCCCCC; border-width: 1; font-family: sans-serif; padding: 0em 0.1em 0em 0.1em; background: #e0e0e0;
+    cursor:pointer; }
+
+    span.l { color: red; font-weight: bold; }
+
+    a.mapnode:link {text-decoration: none; color: black; }
+    a.mapnode:visited {text-decoration: none; color: black; }
+    a.mapnode:active {text-decoration: none; color: black; }
+    a.mapnode:hover {text-decoration: none; color: black; background: #eeeee0; }
+
+</style>
+<!-- ^ Position is not set to relative / absolute here because of Mozilla -->
+</head>
+<body>
+
+<script type="text/javascript">
+   // Here we implement folding. It works fine with MSIE5.5, MSIE6.0 and
+   // Mozilla 0.9.6.
+
+   if (document.layers) {
+      //Netscape 4 specific code
+      pre = 'document.';
+      post = ''; }
+   if (document.getElementById) {
+      //Netscape 6 specific code
+      pre = 'document.getElementById("';
+      post = '").style'; }
+   if (document.all) {
+      //IE4+ specific code
+      pre = 'document.all.';
+      post = '.style'; }
+
+function layer_exists(layer) {
+   try {
+      eval(pre + layer + post);
+      return true; }
+   catch (error) {
+      return false; }}
+
+function show_layer(layer) {
+   eval(pre + layer + post).position = 'relative'; 
+   eval(pre + layer + post).visibility = 'visible'; }
+
+function hide_layer(layer) {
+   eval(pre + layer + post).visibility = 'hidden';
+   eval(pre + layer + post).position = 'absolute'; }
+
+function hide_folder(folder) {
+    hide_folding_layer(folder)
+    show_layer('show'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+}
+
+function show_folder(folder) {
+    // Precondition: all subfolders are folded
+
+    show_layer('hide'+folder);
+    hide_layer('show'+folder);
+    show_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_layer('show'+folder+'_'+i); }
+}
+function show_folder_completely(folder) {
+    // Precondition: all subfolders are folded
+
+    show_layer('hide'+folder);
+    hide_layer('show'+folder);
+    show_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_folder_completely(folder+'_'+i); }
+}
+
+
+
+function hide_folding_layer(folder) {
+   var i;
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       hide_folding_layer(folder+'_'+i); }
+
+   hide_layer('hide'+folder);
+   hide_layer('show'+folder);
+   hide_layer('fold'+folder);
+
+   scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+}
+
+function fold_document() {
+   var i;
+   var folder = '1';
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       hide_folder(folder+'_'+i); }
+}
+
+function unfold_document() {
+   var i;
+   var folder = '1';
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_folder_completely(folder+'_'+i); }
+}
+
+</script>
+<SPAN class="foldspecial" onclick="fold_document()">All +</SPAN>
+<SPAN class="foldspecial" onclick="unfold_document()">All -</SPAN>
+<p>AWS - Fundamentals For System Administrators (2017)
+<ul><li><span id="show1_1" class="foldclosed" onClick="show_folder('1_1')" style="POSITION: absolute">+</span> <span id="hide1_1" class="foldopened" onClick="hide_folder('1_1')">-</span>
+Terminologies &amp; Abbreviations
+<ul id="fold1_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_1_1" class="foldclosed" onClick="show_folder('1_1_1')" style="POSITION: absolute">+</span> <span id="hide1_1_1" class="foldopened" onClick="hide_folder('1_1_1')">-</span>
+AMIs
+<ul id="fold1_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Amazon Machine Images
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_2" class="foldclosed" onClick="show_folder('1_1_2')" style="POSITION: absolute">+</span> <span id="hide1_1_2" class="foldopened" onClick="hide_folder('1_1_2')">-</span>
+EC
+<ul id="fold1_1_2" style="POSITION: relative; VISIBILITY: visible;"><li>Elastic Computing
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_3" class="foldclosed" onClick="show_folder('1_1_3')" style="POSITION: absolute">+</span> <span id="hide1_1_3" class="foldopened" onClick="hide_folder('1_1_3')">-</span>
+S3
+<ul id="fold1_1_3" style="POSITION: relative; VISIBILITY: visible;"><li>Simple Storage Service
+
+</li>
+<li>Object Based Storage
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_4" class="foldclosed" onClick="show_folder('1_1_4')" style="POSITION: absolute">+</span> <span id="hide1_1_4" class="foldopened" onClick="hide_folder('1_1_4')">-</span>
+EBS
+<ul id="fold1_1_4" style="POSITION: relative; VISIBILITY: visible;"><li>Elastic Block Storage
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_5" class="foldclosed" onClick="show_folder('1_1_5')" style="POSITION: absolute">+</span> <span id="hide1_1_5" class="foldopened" onClick="hide_folder('1_1_5')">-</span>
+EC2
+<ul id="fold1_1_5" style="POSITION: relative; VISIBILITY: visible;"><li>Elastic Compute Cloud
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_6" class="foldclosed" onClick="show_folder('1_1_6')" style="POSITION: absolute">+</span> <span id="hide1_1_6" class="foldopened" onClick="hide_folder('1_1_6')">-</span>
+ECU
+<ul id="fold1_1_6" style="POSITION: relative; VISIBILITY: visible;"><li>EC2 Compute Unit
+
+</li>
+<li>Measure of EC2 Processor Unit
+
+</li>
+<li>Deprecated by still used
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_7" class="foldclosed" onClick="show_folder('1_1_7')" style="POSITION: absolute">+</span> <span id="hide1_1_7" class="foldopened" onClick="hide_folder('1_1_7')">-</span>
+vCPU
+<ul id="fold1_1_7" style="POSITION: relative; VISIBILITY: visible;"><li>Virtual CPU
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_8" class="foldclosed" onClick="show_folder('1_1_8')" style="POSITION: absolute">+</span> <span id="hide1_1_8" class="foldopened" onClick="hide_folder('1_1_8')">-</span>
+IAM
+<ul id="fold1_1_8" style="POSITION: relative; VISIBILITY: visible;"><li>Identity Access Management
+
+</li>
+<li>Can create users, groups, policies, permissions, object &amp; access ACLs
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_9" class="foldclosed" onClick="show_folder('1_1_9')" style="POSITION: absolute">+</span> <span id="hide1_1_9" class="foldopened" onClick="hide_folder('1_1_9')">-</span>
+ELB
+<ul id="fold1_1_9" style="POSITION: relative; VISIBILITY: visible;"><li>Elastic Load Balancer
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_10" class="foldclosed" onClick="show_folder('1_1_10')" style="POSITION: absolute">+</span> <span id="hide1_1_10" class="foldopened" onClick="hide_folder('1_1_10')">-</span>
+Route 53
+<ul id="fold1_1_10" style="POSITION: relative; VISIBILITY: visible;"><li>DNS
+
+</li>
+<li>100% Uptime
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_11" class="foldclosed" onClick="show_folder('1_1_11')" style="POSITION: absolute">+</span> <span id="hide1_1_11" class="foldopened" onClick="hide_folder('1_1_11')">-</span>
+RI
+<ul id="fold1_1_11" style="POSITION: relative; VISIBILITY: visible;"><li>Reserved Instances
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_12" class="foldclosed" onClick="show_folder('1_1_12')" style="POSITION: absolute">+</span> <span id="hide1_1_12" class="foldopened" onClick="hide_folder('1_1_12')">-</span>
+VPC
+<ul id="fold1_1_12" style="POSITION: relative; VISIBILITY: visible;"><li>Virtual Private Cloud
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_13" class="foldclosed" onClick="show_folder('1_1_13')" style="POSITION: absolute">+</span> <span id="hide1_1_13" class="foldopened" onClick="hide_folder('1_1_13')">-</span>
+CG
+<ul id="fold1_1_13" style="POSITION: relative; VISIBILITY: visible;"><li>Customer Gateway
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_14" class="foldclosed" onClick="show_folder('1_1_14')" style="POSITION: absolute">+</span> <span id="hide1_1_14" class="foldopened" onClick="hide_folder('1_1_14')">-</span>
+VPG
+<ul id="fold1_1_14" style="POSITION: relative; VISIBILITY: visible;"><li>Virtual Private Gateway
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_15" class="foldclosed" onClick="show_folder('1_1_15')" style="POSITION: absolute">+</span> <span id="hide1_1_15" class="foldopened" onClick="hide_folder('1_1_15')">-</span>
+IGW
+<ul id="fold1_1_15" style="POSITION: relative; VISIBILITY: visible;"><li>Internet Gateway
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_16" class="foldclosed" onClick="show_folder('1_1_16')" style="POSITION: absolute">+</span> <span id="hide1_1_16" class="foldopened" onClick="hide_folder('1_1_16')">-</span>
+ELB
+<ul id="fold1_1_16" style="POSITION: relative; VISIBILITY: visible;"><li>Elastic Load Balancing
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_17" class="foldclosed" onClick="show_folder('1_1_17')" style="POSITION: absolute">+</span> <span id="hide1_1_17" class="foldopened" onClick="hide_folder('1_1_17')">-</span>
+SNS
+<ul id="fold1_1_17" style="POSITION: relative; VISIBILITY: visible;"><li>Simple Notification Service
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_18" class="foldclosed" onClick="show_folder('1_1_18')" style="POSITION: absolute">+</span> <span id="hide1_1_18" class="foldopened" onClick="hide_folder('1_1_18')">-</span>
+SES
+<ul id="fold1_1_18" style="POSITION: relative; VISIBILITY: visible;"><li>Simple Email Service
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_19" class="foldclosed" onClick="show_folder('1_1_19')" style="POSITION: absolute">+</span> <span id="hide1_1_19" class="foldopened" onClick="hide_folder('1_1_19')">-</span>
+SQS
+<ul id="fold1_1_19" style="POSITION: relative; VISIBILITY: visible;"><li>Simple Queue Service
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1_20" class="foldclosed" onClick="show_folder('1_1_20')" style="POSITION: absolute">+</span> <span id="hide1_1_20" class="foldopened" onClick="hide_folder('1_1_20')">-</span>
+RDS
+<ul id="fold1_1_20" style="POSITION: relative; VISIBILITY: visible;"><li>Relational Database Services
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2" class="foldclosed" onClick="show_folder('1_2')" style="POSITION: absolute">+</span> <span id="hide1_2" class="foldopened" onClick="hide_folder('1_2')">-</span>
+Getting Started
+<ul id="fold1_2" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_1" class="foldclosed" onClick="show_folder('1_2_1')" style="POSITION: absolute">+</span> <span id="hide1_2_1" class="foldopened" onClick="hide_folder('1_2_1')">-</span>
+What is AWS?
+<ul id="fold1_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>Infrastructure Service For the World
+
+</li>
+<li>Elastic Computing
+
+</li>
+<li>Stroage in the cloud
+
+</li>
+<li>Security &amp; Compliance
+
+</li>
+<li>Pricing &amp; Availability
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_2" class="foldclosed" onClick="show_folder('1_2_2')" style="POSITION: absolute">+</span> <span id="hide1_2_2" class="foldopened" onClick="hide_folder('1_2_2')">-</span>
+AWS Certifications
+<ul id="fold1_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>Architect
+
+</li>
+<li>Developer
+
+</li>
+<li>SysOps
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_3" class="foldclosed" onClick="show_folder('1_2_3')" style="POSITION: absolute">+</span> <span id="hide1_2_3" class="foldopened" onClick="hide_folder('1_2_3')">-</span>
+Cloud Computing
+<ul id="fold1_2_3" style="POSITION: relative; VISIBILITY: visible;"><li>Automation of Highly Virtualized Environment
+
+</li>
+<li><span id="show1_2_3_1" class="foldclosed" onClick="show_folder('1_2_3_1')" style="POSITION: absolute">+</span> <span id="hide1_2_3_1" class="foldopened" onClick="hide_folder('1_2_3_1')">-</span>
+Essential Characteristics
+<ul id="fold1_2_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>On-Demand
+
+</li>
+<li>Resource Pooling
+
+</li>
+<li>Broad Network Access
+
+</li>
+<li>Rapid Elasticity
+
+</li>
+<li>Measured Services
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_3_2" class="foldclosed" onClick="show_folder('1_2_3_2')" style="POSITION: absolute">+</span> <span id="hide1_2_3_2" class="foldopened" onClick="hide_folder('1_2_3_2')">-</span>
+Service Models
+<ul id="fold1_2_3_2" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_3_2_1" class="foldclosed" onClick="show_folder('1_2_3_2_1')" style="POSITION: absolute">+</span> <span id="hide1_2_3_2_1" class="foldopened" onClick="hide_folder('1_2_3_2_1')">-</span>
+Infrastructure As A Service (IAAS)
+<ul id="fold1_2_3_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>Abstracts all the hardware
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_3_2_2" class="foldclosed" onClick="show_folder('1_2_3_2_2')" style="POSITION: absolute">+</span> <span id="hide1_2_3_2_2" class="foldopened" onClick="hide_folder('1_2_3_2_2')">-</span>
+Platform As A Service (Paas)
+<ul id="fold1_2_3_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>Allows developers develop application against a platform
+
+</li>
+<li>Application is a ware of the infrastructure
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_3_2_3" class="foldclosed" onClick="show_folder('1_2_3_2_3')" style="POSITION: absolute">+</span> <span id="hide1_2_3_2_3" class="foldopened" onClick="hide_folder('1_2_3_2_3')">-</span>
+Software As A Service (SaaS)
+<ul id="fold1_2_3_2_3" style="POSITION: relative; VISIBILITY: visible;"><li>Similar to Basecamp, Things we can consume
+
+</li>
+<li>Can be used to build additional services
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_3_3" class="foldclosed" onClick="show_folder('1_2_3_3')" style="POSITION: absolute">+</span> <span id="hide1_2_3_3" class="foldopened" onClick="hide_folder('1_2_3_3')">-</span>
+Deployment Models
+<ul id="fold1_2_3_3" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_3_3_1" class="foldclosed" onClick="show_folder('1_2_3_3_1')" style="POSITION: absolute">+</span> <span id="hide1_2_3_3_1" class="foldopened" onClick="hide_folder('1_2_3_3_1')">-</span>
+Private
+<ul id="fold1_2_3_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>On-Premise
+
+</li>
+<li><span id="show1_2_3_3_1_1" class="foldclosed" onClick="show_folder('1_2_3_3_1_1')" style="POSITION: absolute">+</span> <span id="hide1_2_3_3_1_1" class="foldopened" onClick="hide_folder('1_2_3_3_1_1')">-</span>
+Private Cloud in the Public cloud
+<ul id="fold1_2_3_3_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Logical seperation
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_3_3_2" class="foldclosed" onClick="show_folder('1_2_3_3_2')" style="POSITION: absolute">+</span> <span id="hide1_2_3_3_2" class="foldopened" onClick="hide_folder('1_2_3_3_2')">-</span>
+Hybrid
+<ul id="fold1_2_3_3_2" style="POSITION: relative; VISIBILITY: visible;"><li>Extend on-premise private cloud to the public cloud
+
+</li>
+<li>Elastic expansion of private infrastructure to complement the private cloud
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_3_3_3" class="foldclosed" onClick="show_folder('1_2_3_3_3')" style="POSITION: absolute">+</span> <span id="hide1_2_3_3_3" class="foldopened" onClick="hide_folder('1_2_3_3_3')">-</span>
+Community
+<ul id="fold1_2_3_3_3" style="POSITION: relative; VISIBILITY: visible;"><li>Vertical Cloud
+<ul><li>Example: Govt. Cloud to comply with Govt. Regulations for Govt. data/infra
+
+</li>
+<li>Example: Health Cloud to comply with HEPA and other regualatory compliances
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_3_3_4" class="foldclosed" onClick="show_folder('1_2_3_3_4')" style="POSITION: absolute">+</span> <span id="hide1_2_3_3_4" class="foldopened" onClick="hide_folder('1_2_3_3_4')">-</span>
+Public
+<ul id="fold1_2_3_3_4" style="POSITION: relative; VISIBILITY: visible;"><li>Example: AWS
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_4" class="foldclosed" onClick="show_folder('1_2_4')" style="POSITION: absolute">+</span> <span id="hide1_2_4" class="foldopened" onClick="hide_folder('1_2_4')">-</span>
+Key Dates in Cloud Computing History
+<ul id="fold1_2_4" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_4_1" class="foldclosed" onClick="show_folder('1_2_4_1')" style="POSITION: absolute">+</span> <span id="hide1_2_4_1" class="foldopened" onClick="hide_folder('1_2_4_1')">-</span>
+July 2002
+<ul id="fold1_2_4_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_4_1_1" class="foldclosed" onClick="show_folder('1_2_4_1_1')" style="POSITION: absolute">+</span> <span id="hide1_2_4_1_1" class="foldopened" onClick="hide_folder('1_2_4_1_1')">-</span>
+AWS Launch
+<ul id="fold1_2_4_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Not the current form of AWS
+
+</li>
+<li>Used internally
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_4_2" class="foldclosed" onClick="show_folder('1_2_4_2')" style="POSITION: absolute">+</span> <span id="hide1_2_4_2" class="foldopened" onClick="hide_folder('1_2_4_2')">-</span>
+March 2006
+<ul id="fold1_2_4_2" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_4_2_1" class="foldclosed" onClick="show_folder('1_2_4_2_1')" style="POSITION: absolute">+</span> <span id="hide1_2_4_2_1" class="foldopened" onClick="hide_folder('1_2_4_2_1')">-</span>
+S3 Launch
+<ul id="fold1_2_4_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>Ability to consume storage
+
+</li>
+<li>Price Model of Pay as you Go lauched
+
+</li>
+<li>Available for external consumers
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_4_3" class="foldclosed" onClick="show_folder('1_2_4_3')" style="POSITION: absolute">+</span> <span id="hide1_2_4_3" class="foldopened" onClick="hide_folder('1_2_4_3')">-</span>
+August 2006
+<ul id="fold1_2_4_3" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_4_3_1" class="foldclosed" onClick="show_folder('1_2_4_3_1')" style="POSITION: absolute">+</span> <span id="hide1_2_4_3_1" class="foldopened" onClick="hide_folder('1_2_4_3_1')">-</span>
+EC2
+<ul id="fold1_2_4_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>Allowed VM like instances in Amazon
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_4_4" class="foldclosed" onClick="show_folder('1_2_4_4')" style="POSITION: absolute">+</span> <span id="hide1_2_4_4" class="foldopened" onClick="hide_folder('1_2_4_4')">-</span>
+April 2008
+<ul id="fold1_2_4_4" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_4_4_1" class="foldclosed" onClick="show_folder('1_2_4_4_1')" style="POSITION: absolute">+</span> <span id="hide1_2_4_4_1" class="foldopened" onClick="hide_folder('1_2_4_4_1')">-</span>
+Google App Engine Launch
+<ul id="fold1_2_4_4_1" style="POSITION: relative; VISIBILITY: visible;"><li>Entry of Google (A Tech Company) into this space validating the tech Amazon built
+
+</li>
+<li>A Platform as Service
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_4_5" class="foldclosed" onClick="show_folder('1_2_4_5')" style="POSITION: absolute">+</span> <span id="hide1_2_4_5" class="foldopened" onClick="hide_folder('1_2_4_5')">-</span>
+November 2009
+<ul id="fold1_2_4_5" style="POSITION: relative; VISIBILITY: visible;"><li>Azure Beta Lauch
+
+</li>
+<li>Microsoft Enters the Market
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2_5" class="foldclosed" onClick="show_folder('1_2_5')" style="POSITION: absolute">+</span> <span id="hide1_2_5" class="foldopened" onClick="hide_folder('1_2_5')">-</span>
+Cloud Service Providers
+<ul id="fold1_2_5" style="POSITION: relative; VISIBILITY: visible;"><li>Refer Gartner Magic Quadrant for Cloud Service Providers
+
+</li>
+
+</ul>
+</li>
+<li><span style="font-family: SansSerif, sans-serif; ">Move from 'Build and Operate' to 'Consume'</span>
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_3" class="foldclosed" onClick="show_folder('1_3')" style="POSITION: absolute">+</span> <span id="hide1_3" class="foldopened" onClick="hide_folder('1_3')">-</span>
+Introduction to AWS
+<ul id="fold1_3" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_3_1" class="foldclosed" onClick="show_folder('1_3_1')" style="POSITION: absolute">+</span> <span id="hide1_3_1" class="foldopened" onClick="hide_folder('1_3_1')">-</span>
+AWS History
+<ul id="fold1_3_1" style="POSITION: relative; VISIBILITY: visible;"><li><p><span id="show1_3_1_1" class="foldclosed" onClick="show_folder('1_3_1_1')" style="POSITION: absolute">+</span> <span id="hide1_3_1_1" class="foldopened" onClick="hide_folder('1_3_1_1')">-</span>
+Jeff Bezose
+<ul id="fold1_3_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Founder of Amazon
+
+</li>
+
+</ul><p>AWS born in 2002
+<p>EC2 developed first and foremost for Amazon's internal infrastructure
+<p>AWS was developed to fulfull an internal need to be able to scale out Amazon's infrastructure worldwide and give developers access to this infrastructure centrally.
+<p>Jeff Bezos introduces EC2 and S2 at MIT's emerging Tech Conferenace
+<p>Quote: There's a hidden Amazon, just under the epidermis, the guts of Amazon, this is all the stuff we have to do on the back-end to make this work - Jeff Bezos
+<p>EC2 created by Chris Pinkham - Amazon VP Engineering
+<p>Offered at Low Margin to discourage competition
+<p>Quote: From experience we know the cost of maintaining a reliable, scalable infrastructure in a traditional multi-data center model could be as high as 70 percent, both in time and effor, and requires significant investment of intellectual capital to sustain over a long period of time - Werner Vogels - Amazon CTO
+</li>
+</ul>
+</li>
+<li><span id="show1_3_2" class="foldclosed" onClick="show_folder('1_3_2')" style="POSITION: absolute">+</span> <span id="hide1_3_2" class="foldopened" onClick="hide_folder('1_3_2')">-</span>
+On-Premises Components
+<ul id="fold1_3_2" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_3_2_1" class="foldclosed" onClick="show_folder('1_3_2_1')" style="POSITION: absolute">+</span> <span id="hide1_3_2_1" class="foldopened" onClick="hide_folder('1_3_2_1')">-</span>
+Individual Components
+<ul id="fold1_3_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>Security
+
+</li>
+<li>Cooling
+
+</li>
+<li>Connectivity
+
+</li>
+<li>Network Hardware
+
+</li>
+<li>Servers
+
+</li>
+<li>Cabling
+
+</li>
+<li>Storage
+
+</li>
+<li>Facilities
+
+</li>
+<li>Expertise on all of the above
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_3_2_2" class="foldclosed" onClick="show_folder('1_3_2_2')" style="POSITION: absolute">+</span> <span id="hide1_3_2_2" class="foldopened" onClick="hide_folder('1_3_2_2')">-</span>
+Understanding IaaS
+<ul id="fold1_3_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>&#xa;    <img src="IaaS.jpg" >&#xa;  
+
+</li>
+<li>Built by automation of repeatable processes
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_3_3" class="foldclosed" onClick="show_folder('1_3_3')" style="POSITION: absolute">+</span> <span id="hide1_3_3" class="foldopened" onClick="hide_folder('1_3_3')">-</span>
+DIY Vs. AWS
+<ul id="fold1_3_3" style="POSITION: relative; VISIBILITY: visible;"><li>DIY
+<ul><li><span id="show1_3_3_1" class="foldclosed" onClick="show_folder('1_3_3_1')" style="POSITION: absolute">+</span> <span id="hide1_3_3_1" class="foldopened" onClick="hide_folder('1_3_3_1')">-</span>
+Scale UP
+<ul id="fold1_3_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>Need 100 today, buy 200. Need only 50 tomorrow, still stuck with 200.
+
+</li>
+
+</ul>
+</li>
+<li>Assume reliable infrastructure
+
+</li>
+<li><span id="show1_3_3_2" class="foldclosed" onClick="show_folder('1_3_3_2')" style="POSITION: absolute">+</span> <span id="hide1_3_3_2" class="foldopened" onClick="hide_folder('1_3_3_2')">-</span>
+Diverse Technical Expertise
+<ul id="fold1_3_3_2" style="POSITION: relative; VISIBILITY: visible;"><li>Tech expertise needed for H/W, Netorking, Virtualization,etc.
+
+</li>
+
+</ul>
+</li>
+<li>Application unaware of infrastructure
+
+</li>
+<li>High Upfront Cost
+
+</li>
+<li>Design, build, operate, support
+
+</li>
+
+</ul>
+</li>
+<li>AWS
+<ul><li><span id="show1_3_3_3" class="foldclosed" onClick="show_folder('1_3_3_3')" style="POSITION: absolute">+</span> <span id="hide1_3_3_3" class="foldopened" onClick="hide_folder('1_3_3_3')">-</span>
+Elastic Service
+<ul id="fold1_3_3_3" style="POSITION: relative; VISIBILITY: visible;"><li>Need 100 today, get 100. Need 50 tomorrow, reduce to 50.
+
+</li>
+
+</ul>
+</li>
+<li>Expect infrastructure to fail
+
+</li>
+<li><span id="show1_3_3_4" class="foldclosed" onClick="show_folder('1_3_3_4')" style="POSITION: absolute">+</span> <span id="hide1_3_3_4" class="foldopened" onClick="hide_folder('1_3_3_4')">-</span>
+Expertise focused on application
+<ul id="fold1_3_3_4" style="POSITION: relative; VISIBILITY: visible;"><li>Focus on the abstract simplified infrastructure provisioning application
+
+</li>
+
+</ul>
+</li>
+<li>Application aware infrastructure
+
+</li>
+<li>Usage-based costs
+
+</li>
+<li>Limited Knowledge/Shared support
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_4" class="foldclosed" onClick="show_folder('1_4')" style="POSITION: absolute">+</span> <span id="hide1_4" class="foldopened" onClick="hide_folder('1_4')">-</span>
+Understanding AWS Global Infrastructure
+<ul id="fold1_4" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_4_1" class="foldclosed" onClick="show_folder('1_4_1')" style="POSITION: absolute">+</span> <span id="hide1_4_1" class="foldopened" onClick="hide_folder('1_4_1')">-</span>
+What is Elastic Computing?
+<ul id="fold1_4_1" style="POSITION: relative; VISIBILITY: visible;"><li>The ability to instantly expand or contract your capacity without incurring upfront OPEX cost.
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_4_2" class="foldclosed" onClick="show_folder('1_4_2')" style="POSITION: absolute">+</span> <span id="hide1_4_2" class="foldopened" onClick="hide_folder('1_4_2')">-</span>
+Region &amp; Availabilty Zones
+<ul id="fold1_4_2" style="POSITION: relative; VISIBILITY: visible;"><li>Region = Geographical Area specified by Amazon
+<ul><li>17 Regions + Gov Cloud (As of 8-1-2018)
+
+</li>
+
+</ul>
+</li>
+<li>Availability Zone = Data center within a region that Amazon has
+
+</li>
+<li><span id="show1_4_2_1" class="foldclosed" onClick="show_folder('1_4_2_1')" style="POSITION: absolute">+</span> <span id="hide1_4_2_1" class="foldopened" onClick="hide_folder('1_4_2_1')">-</span>
+Depending on Region/Availability Zone, certain services may/maynot be available
+<ul id="fold1_4_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>Type of services required may dictate where the resources are placed.
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_4_2_2" class="foldclosed" onClick="show_folder('1_4_2_2')" style="POSITION: absolute">+</span> <span id="hide1_4_2_2" class="foldopened" onClick="hide_folder('1_4_2_2')">-</span>
+Edge Location
+<ul id="fold1_4_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>Edge locations are services that Amazon offer which are complimentary.
+
+</li>
+<li>Cannot place resources
+
+</li>
+<li>Can consume services at edge locations
+
+</li>
+<li><span id="show1_4_2_2_1" class="foldclosed" onClick="show_folder('1_4_2_2_1')" style="POSITION: absolute">+</span> <span id="hide1_4_2_2_1" class="foldopened" onClick="hide_folder('1_4_2_2_1')">-</span>
+Example: Amazon Route 53 DNS
+<ul id="fold1_4_2_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>SLA of 100%
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_5" class="foldclosed" onClick="show_folder('1_5')" style="POSITION: absolute">+</span> <span id="hide1_5" class="foldopened" onClick="hide_folder('1_5')">-</span>
+Understanding AWS Security Measures
+<ul id="fold1_5" style="POSITION: relative; VISIBILITY: visible;"><li><p>There is no way any individual consumer organization could build security measures that cloud providers like AWS have built in, due to resource, scale and automation.
+<p><span id="show1_5_1" class="foldclosed" onClick="show_folder('1_5_1')" style="POSITION: absolute">+</span> <span id="hide1_5_1" class="foldopened" onClick="hide_folder('1_5_1')">-</span>
+Physical Access
+<ul id="fold1_5_1" style="POSITION: relative; VISIBILITY: visible;"><li>Location is Secret
+
+</li>
+<li>Controlled Physical Access
+
+</li>
+<li>Best in class datacenter security
+
+</li>
+<li>Video Surveillance
+
+</li>
+<li><span id="show1_5_1_1" class="foldclosed" onClick="show_folder('1_5_1_1')" style="POSITION: absolute">+</span> <span id="hide1_5_1_1" class="foldopened" onClick="hide_folder('1_5_1_1')">-</span>
+Server and Network Infrastructure
+<ul id="fold1_5_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Hardware refresh cycle to avoid component failure
+
+</li>
+<li>Properly decommissioned storage
+
+</li>
+<li>Always on Monitoring System
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_5_1_2" class="foldclosed" onClick="show_folder('1_5_1_2')" style="POSITION: absolute">+</span> <span id="hide1_5_1_2" class="foldopened" onClick="hide_folder('1_5_1_2')">-</span>
+Security Certifications &amp; Compliance
+<ul id="fold1_5_1_2" style="POSITION: relative; VISIBILITY: visible;"><li>HIPPA
+
+</li>
+<li>SOC1/SOC2/SOC3
+
+</li>
+<li>PCI DSS Level 1
+
+</li>
+<li>ISO 27001
+
+</li>
+<li>FedRAMP(SM)
+
+</li>
+<li>DIACAP and FISMA
+
+</li>
+<li>ITAR
+
+</li>
+<li>FIPS 140-2
+
+</li>
+<li>CSA
+
+</li>
+<li>MPAA
+
+</li>
+<li>Lot, lot, lot more...
+<ul><li>https://aws.amazon.com/compliance/
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul><p><span id="show1_5_2" class="foldclosed" onClick="show_folder('1_5_2')" style="POSITION: absolute">+</span> <span id="hide1_5_2" class="foldopened" onClick="hide_folder('1_5_2')">-</span>
+Shared Security Responsibility
+<ul id="fold1_5_2" style="POSITION: relative; VISIBILITY: visible;"><li>Responsibility for security is shared between client (US) and aws
+
+</li>
+<li><span id="show1_5_2_1" class="foldclosed" onClick="show_folder('1_5_2_1')" style="POSITION: absolute">+</span> <span id="hide1_5_2_1" class="foldopened" onClick="hide_folder('1_5_2_1')">-</span>
+AWS Security Responsibilities
+<ul id="fold1_5_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>Virtual Host Security
+
+</li>
+<li>Storage Security
+
+</li>
+<li>Network Security
+
+</li>
+<li>Data Center Security
+
+</li>
+<li>Database Security
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_5_2_2" class="foldclosed" onClick="show_folder('1_5_2_2')" style="POSITION: absolute">+</span> <span id="hide1_5_2_2" class="foldopened" onClick="hide_folder('1_5_2_2')">-</span>
+Our Security Responsibility
+<ul id="fold1_5_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>AWS Account Security (MFA, API)
+
+</li>
+<li>Operating System
+
+</li>
+<li>Database
+
+</li>
+<li>Applications
+
+</li>
+<li>Data Encryption
+
+</li>
+<li>Authentication
+
+</li>
+<li>Network Integrity
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_5_2_3" class="foldclosed" onClick="show_folder('1_5_2_3')" style="POSITION: absolute">+</span> <span id="hide1_5_2_3" class="foldopened" onClick="hide_folder('1_5_2_3')">-</span>
+Security Methods and Connectivity
+<ul id="fold1_5_2_3" style="POSITION: relative; VISIBILITY: visible;"><li>How does Amazon secure stuff and tools provided to secure stuff?
+
+</li>
+<li><span id="show1_5_2_3_1" class="foldclosed" onClick="show_folder('1_5_2_3_1')" style="POSITION: absolute">+</span> <span id="hide1_5_2_3_1" class="foldopened" onClick="hide_folder('1_5_2_3_1')">-</span>
+Security Groups
+<ul id="fold1_5_2_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>Ability to specifiy which component have acess to which component
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_5_2_3_2" class="foldclosed" onClick="show_folder('1_5_2_3_2')" style="POSITION: absolute">+</span> <span id="hide1_5_2_3_2" class="foldopened" onClick="hide_folder('1_5_2_3_2')">-</span>
+Virtual Private Cloud (VPC)
+<ul id="fold1_5_2_3_2" style="POSITION: relative; VISIBILITY: visible;"><li>AKA Virtual Networking
+
+</li>
+<li>Have access list
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_5_2_3_3" class="foldclosed" onClick="show_folder('1_5_2_3_3')" style="POSITION: absolute">+</span> <span id="hide1_5_2_3_3" class="foldopened" onClick="hide_folder('1_5_2_3_3')">-</span>
+Direct Connect
+<ul id="fold1_5_2_3_3" style="POSITION: relative; VISIBILITY: visible;"><li><p>Other Data Centers (Not owned by Amazon), aka Direct Connect Data Centers, have Gigabit connectivity to Amazon Cloud
+<p>Equipments (NAS, AS400, etc) can be placed in these Data Center, to have Gigabit connection to Amazon cloud
+</li>
+</ul>
+</li>
+<li><span id="show1_5_2_3_4" class="foldclosed" onClick="show_folder('1_5_2_3_4')" style="POSITION: absolute">+</span> <span id="hide1_5_2_3_4" class="foldopened" onClick="hide_folder('1_5_2_3_4')">-</span>
+Import/Export
+<ul id="fold1_5_2_3_4" style="POSITION: relative; VISIBILITY: visible;"><li><p>A service offered by Amazon which allows you send storage media/array to them and have the data imported/exported in a specific format to/from your Amazon storage, securely.
+</li>
+</ul>
+</li>
+<li><span id="show1_5_2_3_5" class="foldclosed" onClick="show_folder('1_5_2_3_5')" style="POSITION: absolute">+</span> <span id="hide1_5_2_3_5" class="foldopened" onClick="hide_folder('1_5_2_3_5')">-</span>
+VPN Access
+<ul id="fold1_5_2_3_5" style="POSITION: relative; VISIBILITY: visible;"><li>Allows to extend on-premise network to Amazon cloud
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_5_2_3_6" class="foldclosed" onClick="show_folder('1_5_2_3_6')" style="POSITION: absolute">+</span> <span id="hide1_5_2_3_6" class="foldopened" onClick="hide_folder('1_5_2_3_6')">-</span>
+Dedicated Server
+<ul id="fold1_5_2_3_6" style="POSITION: relative; VISIBILITY: visible;"><li><p>Can be used for a price, to host applications/data which has regulatory requirement to host it on a stand alone server
+</li>
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul><p><span id="show1_5_3" class="foldclosed" onClick="show_folder('1_5_3')" style="POSITION: absolute">+</span> <span id="hide1_5_3" class="foldopened" onClick="hide_folder('1_5_3')">-</span>
+Identity and Access Management (IAM)
+<ul id="fold1_5_3" style="POSITION: relative; VISIBILITY: visible;"><li><span style="font-family: SansSerif, sans-serif; font-weight: bold; ">Slue of control that AWS give you.</span>
+
+</li>
+<li><span id="show1_5_3_1" class="foldclosed" onClick="show_folder('1_5_3_1')" style="POSITION: absolute">+</span> <span id="hide1_5_3_1" class="foldopened" onClick="hide_folder('1_5_3_1')">-</span>
+User and Service Management
+<ul id="fold1_5_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>Very high levels of delegation
+
+</li>
+
+</ul>
+</li>
+<li>Control access to AWS resouces
+
+</li>
+<li>Multi-Factor Authentication
+
+</li>
+<li>API Access
+
+</li>
+
+</ul></li>
+</ul>
+</li>
+<li><span id="show1_6" class="foldclosed" onClick="show_folder('1_6')" style="POSITION: absolute">+</span> <span id="hide1_6" class="foldopened" onClick="hide_folder('1_6')">-</span>
+Working With AWS Storage: Ephemeral &amp; S3
+<ul id="fold1_6" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_6_1" class="foldclosed" onClick="show_folder('1_6_1')" style="POSITION: absolute">+</span> <span id="hide1_6_1" class="foldopened" onClick="hide_folder('1_6_1')">-</span>
+Understanding Ephemeral Storage
+<ul id="fold1_6_1" style="POSITION: relative; VISIBILITY: visible;"><li>AKA Instance Store
+
+</li>
+<li>Temporary Block-Level Storage - Hosted on the same server that is presenting the EC2 intance
+
+</li>
+<li>Only Free Storage with an EC2 Instance
+
+</li>
+<li><span id="show1_6_1_1" class="foldclosed" onClick="show_folder('1_6_1_1')" style="POSITION: absolute">+</span> <span id="hide1_6_1_1" class="foldopened" onClick="hide_folder('1_6_1_1')">-</span>
+Data is list when instance is terminated or stopped
+<ul id="fold1_6_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Not when it is rebooted
+
+</li>
+
+</ul>
+</li>
+<li>The volume is attached and cannot be seperated from the EC2 instance
+
+</li>
+<li>There is no SLA, access speed is not guaranteed
+
+</li>
+<li>Buffers, caches, scratch data, etc.
+
+</li>
+<li>Replicated data fro load-balanced web server
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_6_2" class="foldclosed" onClick="show_folder('1_6_2')" style="POSITION: absolute">+</span> <span id="hide1_6_2" class="foldopened" onClick="hide_folder('1_6_2')">-</span>
+Amazon Simple Storage Service (S3)
+<ul id="fold1_6_2" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_6_2_1" class="foldclosed" onClick="show_folder('1_6_2_1')" style="POSITION: absolute">+</span> <span id="hide1_6_2_1" class="foldopened" onClick="hide_folder('1_6_2_1')">-</span>
+Intro
+<ul id="fold1_6_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>First AWS service introduced in 2006
+
+</li>
+<li>Internet accessible storage via HTTP/HTTPS
+
+</li>
+<li>Audio,Video,Image,Backup,etc...
+
+</li>
+<li>Unlimited bucket size
+
+</li>
+<li>Up to 5TB object size
+
+</li>
+<li>Priced on storage used and transfer out
+
+</li>
+<li><span id="show1_6_2_1_1" class="foldclosed" onClick="show_folder('1_6_2_1_1')" style="POSITION: absolute">+</span> <span id="hide1_6_2_1_1" class="foldopened" onClick="hide_folder('1_6_2_1_1')">-</span>
+It's not a file system
+<ul id="fold1_6_2_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Cannot map as a drive
+
+</li>
+
+</ul>
+</li>
+<li>99.99% SLA Uptime 
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_6_2_2" class="foldclosed" onClick="show_folder('1_6_2_2')" style="POSITION: absolute">+</span> <span id="hide1_6_2_2" class="foldopened" onClick="hide_folder('1_6_2_2')">-</span>
+Two Types of S3 Storage
+<ul id="fold1_6_2_2" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_6_2_2_1" class="foldclosed" onClick="show_folder('1_6_2_2_1')" style="POSITION: absolute">+</span> <span id="hide1_6_2_2_1" class="foldopened" onClick="hide_folder('1_6_2_2_1')">-</span>
+Standard Storage
+<ul id="fold1_6_2_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>99.999999999% durability
+
+</li>
+<li><span id="show1_6_2_2_1_1" class="foldclosed" onClick="show_folder('1_6_2_2_1_1')" style="POSITION: absolute">+</span> <span id="hide1_6_2_2_1_1" class="foldopened" onClick="hide_folder('1_6_2_2_1_1')">-</span>
+First 50TB $0.023 /GB
+<ul id="fold1_6_2_2_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Varies by region
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_6_2_2_2" class="foldclosed" onClick="show_folder('1_6_2_2_2')" style="POSITION: absolute">+</span> <span id="hide1_6_2_2_2" class="foldopened" onClick="hide_folder('1_6_2_2_2')">-</span>
+Reduced Redundancy Storage (RRS)
+<ul id="fold1_6_2_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>??????????????
+
+</li>
+<li>First 1TB $0.024/GB ??
+
+</li>
+<li>Price seems to be higher than Standard storage
+
+</li>
+<li>Reduced durability - 99.99%
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_7" class="foldclosed" onClick="show_folder('1_7')" style="POSITION: absolute">+</span> <span id="hide1_7" class="foldopened" onClick="hide_folder('1_7')">-</span>
+Working with AWS Storage: EBS and Glacier
+<ul id="fold1_7" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_7_1" class="foldclosed" onClick="show_folder('1_7_1')" style="POSITION: absolute">+</span> <span id="hide1_7_1" class="foldopened" onClick="hide_folder('1_7_1')">-</span>
+Understanding Elastic Block Storage - EBS
+<ul id="fold1_7_1" style="POSITION: relative; VISIBILITY: visible;"><li>Not internet accessible
+
+</li>
+<li>Persistent file system for EC2
+
+</li>
+<li>Does not need to be attached to an instance
+
+</li>
+<li>Can be transferred between Availability Zones
+
+</li>
+<li>Supports incremental snapshots
+
+</li>
+<li>EBS leverage S3 for snapshot storage
+
+</li>
+<li>Provisioned IOPS
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_7_2" class="foldclosed" onClick="show_folder('1_7_2')" style="POSITION: absolute">+</span> <span id="hide1_7_2" class="foldopened" onClick="hide_folder('1_7_2')">-</span>
+Understanding Glacier
+<ul id="fold1_7_2" style="POSITION: relative; VISIBILITY: visible;"><li>Very cheap storage
+
+</li>
+<li>Userful for infrequently used data. Ideal of backup.
+
+</li>
+<li>Very, very slow retrieval times (4-6 hours)
+
+</li>
+<li>High Durability
+
+</li>
+<li>Cost for restore
+
+</li>
+<li>AED 256 bit data encryption
+
+</li>
+<li>$0.004 per GB /month
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8" class="foldclosed" onClick="show_folder('1_8')" style="POSITION: absolute">+</span> <span id="hide1_8" class="foldopened" onClick="hide_folder('1_8')">-</span>
+AWS Compute Options
+<ul id="fold1_8" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_8_1" class="foldclosed" onClick="show_folder('1_8_1')" style="POSITION: absolute">+</span> <span id="hide1_8_1" class="foldopened" onClick="hide_folder('1_8_1')">-</span>
+Elastic Compute Cloud (EC2)
+<ul id="fold1_8_1" style="POSITION: relative; VISIBILITY: visible;"><li>Pay-Per-Use, scalable platform for VMs
+
+</li>
+<li>Supports Windows and Linux Instances
+
+</li>
+<li>Based on Amazon Machine Image (AMI) refers to virtual disk template (Ex. OVA, OVF)
+
+</li>
+<li>You can import/export your own AMIs
+
+</li>
+<li>You can provision AMIs from Amazon Market Place
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8_2" class="foldclosed" onClick="show_folder('1_8_2')" style="POSITION: absolute">+</span> <span id="hide1_8_2" class="foldopened" onClick="hide_folder('1_8_2')">-</span>
+EC2 Compute Unit (ECU)
+<ul id="fold1_8_2" style="POSITION: relative; VISIBILITY: visible;"><li>Amazon has moved away from this to vCPU
+
+</li>
+<li>A relative measure of processing power
+
+</li>
+<li>Abstracts CPU hardware changes
+
+</li>
+<li>One ECU is equivalent to 1.0 - 1.2 Ghz 2007 Intel Opteron or 2007 Xeon
+
+</li>
+<li>Consistent amount of CPU capacity regardless of hardware
+
+</li>
+<li>Each intance type may be based on different physical processors
+
+</li>
+<li>Manage consistency through benchmarks and tests
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8_3" class="foldclosed" onClick="show_folder('1_8_3')" style="POSITION: absolute">+</span> <span id="hide1_8_3" class="foldopened" onClick="hide_folder('1_8_3')">-</span>
+EC2 Instance Type
+<ul id="fold1_8_3" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_8_3_1" class="foldclosed" onClick="show_folder('1_8_3_1')" style="POSITION: absolute">+</span> <span id="hide1_8_3_1" class="foldopened" onClick="hide_folder('1_8_3_1')">-</span>
+Micro Instances
+<ul id="fold1_8_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>Instance with very low resources
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8_3_2" class="foldclosed" onClick="show_folder('1_8_3_2')" style="POSITION: absolute">+</span> <span id="hide1_8_3_2" class="foldopened" onClick="hide_folder('1_8_3_2')">-</span>
+General Purpose
+<ul id="fold1_8_3_2" style="POSITION: relative; VISIBILITY: visible;"><li>Good balance of all resources including CPU, Memory, Diskspace, etc
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8_3_3" class="foldclosed" onClick="show_folder('1_8_3_3')" style="POSITION: absolute">+</span> <span id="hide1_8_3_3" class="foldopened" onClick="hide_folder('1_8_3_3')">-</span>
+Compute Optimized
+<ul id="fold1_8_3_3" style="POSITION: relative; VISIBILITY: visible;"><li>Gives preference to vCPU
+
+</li>
+<li>Specifically designed for workloads that are CPU intensive
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8_3_4" class="foldclosed" onClick="show_folder('1_8_3_4')" style="POSITION: absolute">+</span> <span id="hide1_8_3_4" class="foldopened" onClick="hide_folder('1_8_3_4')">-</span>
+GPU Intances
+<ul id="fold1_8_3_4" style="POSITION: relative; VISIBILITY: visible;"><li>Video/Image rendering
+
+</li>
+<li>3D Stuff
+
+</li>
+<li>Heavy compute that knows how to take advantage of GPUs
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8_3_5" class="foldclosed" onClick="show_folder('1_8_3_5')" style="POSITION: absolute">+</span> <span id="hide1_8_3_5" class="foldopened" onClick="hide_folder('1_8_3_5')">-</span>
+Memory Optimized
+<ul id="fold1_8_3_5" style="POSITION: relative; VISIBILITY: visible;"><li>Workload that are memory intensive
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8_3_6" class="foldclosed" onClick="show_folder('1_8_3_6')" style="POSITION: absolute">+</span> <span id="hide1_8_3_6" class="foldopened" onClick="hide_folder('1_8_3_6')">-</span>
+Storage Optimized
+<ul id="fold1_8_3_6" style="POSITION: relative; VISIBILITY: visible;"><li>For workload that requires intensive storage
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_9" class="foldclosed" onClick="show_folder('1_9')" style="POSITION: absolute">+</span> <span id="hide1_9" class="foldopened" onClick="hide_folder('1_9')">-</span>
+Understanding EC2 Pricing
+<ul id="fold1_9" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_9_1" class="foldclosed" onClick="show_folder('1_9_1')" style="POSITION: absolute">+</span> <span id="hide1_9_1" class="foldopened" onClick="hide_folder('1_9_1')">-</span>
+On-Demand Instances
+<ul id="fold1_9_1" style="POSITION: relative; VISIBILITY: visible;"><li>The default type
+
+</li>
+<li>The most expensive option
+
+</li>
+<li>No Commitment
+
+</li>
+<li>Price vary by AWS Region
+
+</li>
+<li>Billed on an hourly basis
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_9_2" class="foldclosed" onClick="show_folder('1_9_2')" style="POSITION: absolute">+</span> <span id="hide1_9_2" class="foldopened" onClick="hide_folder('1_9_2')">-</span>
+Reserved Instances (RI)
+<ul id="fold1_9_2" style="POSITION: relative; VISIBILITY: visible;"><li>Less expensive
+
+</li>
+<li>Required a commitment (1 or 3 years)
+
+</li>
+<li>Has an upfront cost
+
+</li>
+<li>Lower Hourly rate
+
+</li>
+<li>RI can be sold on the AWS marketplace
+
+</li>
+<li>You commit to utilization
+
+</li>
+<li><span id="show1_9_2_1" class="foldclosed" onClick="show_folder('1_9_2_1')" style="POSITION: absolute">+</span> <span id="hide1_9_2_1" class="foldopened" onClick="hide_folder('1_9_2_1')">-</span>
+Levels of RI based on Utlilization
+<ul id="fold1_9_2_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_9_2_1_1" class="foldclosed" onClick="show_folder('1_9_2_1_1')" style="POSITION: absolute">+</span> <span id="hide1_9_2_1_1" class="foldopened" onClick="hide_folder('1_9_2_1_1')">-</span>
+Light Utilization RIs
+<ul id="fold1_9_2_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Ideal for couple of hrs/day or couple days/week
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_9_2_1_2" class="foldclosed" onClick="show_folder('1_9_2_1_2')" style="POSITION: absolute">+</span> <span id="hide1_9_2_1_2" class="foldopened" onClick="hide_folder('1_9_2_1_2')">-</span>
+Medium Utilization RIs
+<ul id="fold1_9_2_1_2" style="POSITION: relative; VISIBILITY: visible;"><li>Ideal for couple of hrs/day or couple days/weeks
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_9_2_1_3" class="foldclosed" onClick="show_folder('1_9_2_1_3')" style="POSITION: absolute">+</span> <span id="hide1_9_2_1_3" class="foldopened" onClick="hide_folder('1_9_2_1_3')">-</span>
+Heavy Utilization RIs
+<ul id="fold1_9_2_1_3" style="POSITION: relative; VISIBILITY: visible;"><li>Commiting to running 100%
+
+</li>
+<li>Highest Saving
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li>Check www.ec2instances.info
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_9_3" class="foldclosed" onClick="show_folder('1_9_3')" style="POSITION: absolute">+</span> <span id="hide1_9_3" class="foldopened" onClick="hide_folder('1_9_3')">-</span>
+Spot Instances
+<ul id="fold1_9_3" style="POSITION: relative; VISIBILITY: visible;"><li>Unused AWS Capacity
+
+</li>
+<li>Very Cheap Hourly Rate
+
+</li>
+<li><span id="show1_9_3_1" class="foldclosed" onClick="show_folder('1_9_3_1')" style="POSITION: absolute">+</span> <span id="hide1_9_3_1" class="foldopened" onClick="hide_folder('1_9_3_1')">-</span>
+Not guaranteed
+<ul id="fold1_9_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>Can be kicked out of an instance due to a lower bid
+
+</li>
+
+</ul>
+</li>
+<li>Based on bid
+
+</li>
+<li>Ideal for raw processing power, grid-like applications
+
+</li>
+<li>Highly Scriptable
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_9_4" class="foldclosed" onClick="show_folder('1_9_4')" style="POSITION: absolute">+</span> <span id="hide1_9_4" class="foldopened" onClick="hide_folder('1_9_4')">-</span>
+Along with EC2 pricing must factor in:
+<ul id="fold1_9_4" style="POSITION: relative; VISIBILITY: visible;"><li>Storage Pricing EBS
+
+</li>
+<li>Transfer Pricing
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_10" class="foldclosed" onClick="show_folder('1_10')" style="POSITION: absolute">+</span> <span id="hide1_10" class="foldopened" onClick="hide_folder('1_10')">-</span>
+AWS Billing Calculator
+<ul id="fold1_10" style="POSITION: relative; VISIBILITY: visible;"><li>https://calculator.s3.amazonaws.com/index.html
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11" class="foldclosed" onClick="show_folder('1_11')" style="POSITION: absolute">+</span> <span id="hide1_11" class="foldopened" onClick="hide_folder('1_11')">-</span>
+Understanding AWS Networking, CloudWatch and Auto Scaling
+<ul id="fold1_11" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_11_1" class="foldclosed" onClick="show_folder('1_11_1')" style="POSITION: absolute">+</span> <span id="hide1_11_1" class="foldopened" onClick="hide_folder('1_11_1')">-</span>
+Virtual Private Cloud (VPC)
+<ul id="fold1_11_1" style="POSITION: relative; VISIBILITY: visible;"><li>Logically isolated network in the AWS cloud
+
+</li>
+<li>Gives control of network architecture
+
+</li>
+<li><span id="show1_11_1_1" class="foldclosed" onClick="show_folder('1_11_1_1')" style="POSITION: absolute">+</span> <span id="hide1_11_1_1" class="foldopened" onClick="hide_folder('1_11_1_1')">-</span>
+Enhanced security
+<ul id="fold1_11_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Ingress and Egress Security
+
+</li>
+
+</ul>
+</li>
+<li>Internetwork with other organization
+
+</li>
+<li><span id="show1_11_1_2" class="foldclosed" onClick="show_folder('1_11_1_2')" style="POSITION: absolute">+</span> <span id="hide1_11_1_2" class="foldopened" onClick="hide_folder('1_11_1_2')">-</span>
+Elastic IP Address (public IPs)
+<ul id="fold1_11_1_2" style="POSITION: relative; VISIBILITY: visible;"><li>First Elastic IP Address with the instance is free
+
+</li>
+
+</ul>
+</li>
+<li>Enable hybrid cloud (site-to-site VPN)
+
+</li>
+<li>VPC Cost = $0
+
+</li>
+<li>VPN cost is $0.05/hr
+
+</li>
+<li><span id="show1_11_1_3" class="foldclosed" onClick="show_folder('1_11_1_3')" style="POSITION: absolute">+</span> <span id="hide1_11_1_3" class="foldopened" onClick="hide_folder('1_11_1_3')">-</span>
+AWS Reference Model
+<ul id="fold1_11_1_3" style="POSITION: relative; VISIBILITY: visible;"><li>&#xa;    <img src="AWSArchReferenceModel.jpg" >&#xa;  
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_1_4" class="foldclosed" onClick="show_folder('1_11_1_4')" style="POSITION: absolute">+</span> <span id="hide1_11_1_4" class="foldopened" onClick="hide_folder('1_11_1_4')">-</span>
+VPC Access
+<ul id="fold1_11_1_4" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_11_1_4_1" class="foldclosed" onClick="show_folder('1_11_1_4_1')" style="POSITION: absolute">+</span> <span id="hide1_11_1_4_1" class="foldopened" onClick="hide_folder('1_11_1_4_1')">-</span>
+Gateway
+<ul id="fold1_11_1_4_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_11_1_4_1_1" class="foldclosed" onClick="show_folder('1_11_1_4_1_1')" style="POSITION: absolute">+</span> <span id="hide1_11_1_4_1_1" class="foldopened" onClick="hide_folder('1_11_1_4_1_1')">-</span>
+Internet Gateway (IGW)
+<ul id="fold1_11_1_4_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Virtual Device that allow Ingress &amp; Egress traffic to the internet
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_1_4_1_2" class="foldclosed" onClick="show_folder('1_11_1_4_1_2')" style="POSITION: absolute">+</span> <span id="hide1_11_1_4_1_2" class="foldopened" onClick="hide_folder('1_11_1_4_1_2')">-</span>
+Virtual Private Gateway (VPG)
+<ul id="fold1_11_1_4_1_2" style="POSITION: relative; VISIBILITY: visible;"><li>AWS side of secure VPN
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_1_4_1_3" class="foldclosed" onClick="show_folder('1_11_1_4_1_3')" style="POSITION: absolute">+</span> <span id="hide1_11_1_4_1_3" class="foldopened" onClick="hide_folder('1_11_1_4_1_3')">-</span>
+Customer Gateway (CG)
+<ul id="fold1_11_1_4_1_3" style="POSITION: relative; VISIBILITY: visible;"><li>Customer side (device) of secure VPN
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_1_4_2" class="foldclosed" onClick="show_folder('1_11_1_4_2')" style="POSITION: absolute">+</span> <span id="hide1_11_1_4_2" class="foldopened" onClick="hide_folder('1_11_1_4_2')">-</span>
+VPN
+<ul id="fold1_11_1_4_2" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_11_1_4_2_1" class="foldclosed" onClick="show_folder('1_11_1_4_2_1')" style="POSITION: absolute">+</span> <span id="hide1_11_1_4_2_1" class="foldopened" onClick="hide_folder('1_11_1_4_2_1')">-</span>
+Direct Connect
+<ul id="fold1_11_1_4_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>When VPN connection is not enough
+
+</li>
+<li>Dedicated and isolated
+
+</li>
+<li>No Internet
+
+</li>
+<li>HA connectivity supported
+
+</li>
+<li>Like MPLS
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_1_4_2_2" class="foldclosed" onClick="show_folder('1_11_1_4_2_2')" style="POSITION: absolute">+</span> <span id="hide1_11_1_4_2_2" class="foldopened" onClick="hide_folder('1_11_1_4_2_2')">-</span>
+Hardware based VPN
+<ul id="fold1_11_1_4_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>On-Premise to AWS over internet
+
+</li>
+<li>HA connectivity is support
+
+</li>
+<li>3rd party brands supported
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_2" class="foldclosed" onClick="show_folder('1_11_2')" style="POSITION: absolute">+</span> <span id="hide1_11_2" class="foldopened" onClick="hide_folder('1_11_2')">-</span>
+VPC Network Security
+<ul id="fold1_11_2" style="POSITION: relative; VISIBILITY: visible;"><li>VPC is region-wide
+
+</li>
+<li>Subnets are Avaialability specific
+
+</li>
+<li>All subnets can route to each other by default
+
+</li>
+<li>Some resources will get Elastic IP Addresses, other will get only subnet addresses
+
+</li>
+<li><span id="show1_11_2_1" class="foldclosed" onClick="show_folder('1_11_2_1')" style="POSITION: absolute">+</span> <span id="hide1_11_2_1" class="foldopened" onClick="hide_folder('1_11_2_1')">-</span>
+Security Groups
+<ul id="fold1_11_2_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_11_2_1_1" class="foldclosed" onClick="show_folder('1_11_2_1_1')" style="POSITION: absolute">+</span> <span id="hide1_11_2_1_1" class="foldopened" onClick="hide_folder('1_11_2_1_1')">-</span>
+Resource level traffic firewall
+<ul id="fold1_11_2_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Resource = instance, ELB, etc.
+
+</li>
+
+</ul>
+</li>
+<li>Ingress and Egress
+
+</li>
+<li><span id="show1_11_2_1_2" class="foldclosed" onClick="show_folder('1_11_2_1_2')" style="POSITION: absolute">+</span> <span id="hide1_11_2_1_2" class="foldopened" onClick="hide_folder('1_11_2_1_2')">-</span>
+Stateful
+<ul id="fold1_11_2_1_2" style="POSITION: relative; VISIBILITY: visible;"><li>Return traffic allowed
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_2_2" class="foldclosed" onClick="show_folder('1_11_2_2')" style="POSITION: absolute">+</span> <span id="hide1_11_2_2" class="foldopened" onClick="hide_folder('1_11_2_2')">-</span>
+Access Control Lists
+<ul id="fold1_11_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>Source and Protocol fitering
+
+</li>
+<li><span id="show1_11_2_2_1" class="foldclosed" onClick="show_folder('1_11_2_2_1')" style="POSITION: absolute">+</span> <span id="hide1_11_2_2_1" class="foldopened" onClick="hide_folder('1_11_2_2_1')">-</span>
+Subnet level traffic firewall
+<ul id="fold1_11_2_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>Separate inbound and outbound rule set
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_2_2_2" class="foldclosed" onClick="show_folder('1_11_2_2_2')" style="POSITION: absolute">+</span> <span id="hide1_11_2_2_2" class="foldopened" onClick="hide_folder('1_11_2_2_2')">-</span>
+Stateless
+<ul id="fold1_11_2_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>Traffic stictly fitered
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_2_3" class="foldclosed" onClick="show_folder('1_11_2_3')" style="POSITION: absolute">+</span> <span id="hide1_11_2_3" class="foldopened" onClick="hide_folder('1_11_2_3')">-</span>
+VPC Peering
+<ul id="fold1_11_2_3" style="POSITION: relative; VISIBILITY: visible;"><li>Allow connection between 2 VPCs
+
+</li>
+<li>No Overlapping network addresses are allowed
+
+</li>
+<li>No transitive peering allowed
+
+</li>
+<li>Inter-VPC routing is available
+
+</li>
+<li>Same or different AWS account
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_3" class="foldclosed" onClick="show_folder('1_11_3')" style="POSITION: absolute">+</span> <span id="hide1_11_3" class="foldopened" onClick="hide_folder('1_11_3')">-</span>
+Elastic Load Balancing (ELB)
+<ul id="fold1_11_3" style="POSITION: relative; VISIBILITY: visible;"><li>Region Wide Load Balancers
+
+</li>
+<li>Can be used internally or externally
+
+</li>
+<li><span id="show1_11_3_1" class="foldclosed" onClick="show_folder('1_11_3_1')" style="POSITION: absolute">+</span> <span id="hide1_11_3_1" class="foldopened" onClick="hide_folder('1_11_3_1')">-</span>
+SSL Termination and Processing
+<ul id="fold1_11_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>Allow SSL certificate to be used in the Loadbalancer to serve all destination hosts
+
+</li>
+<li>Example: Multiple Webserver served by single SSL on Loadbalancer
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_3_2" class="foldclosed" onClick="show_folder('1_11_3_2')" style="POSITION: absolute">+</span> <span id="hide1_11_3_2" class="foldopened" onClick="hide_folder('1_11_3_2')">-</span>
+ELB EC2 health check
+<ul id="fold1_11_3_2" style="POSITION: relative; VISIBILITY: visible;"><li><p>Capable of doing health check for destination hosts
+<p>Example: If ELB sending traffic to multiple webserver, one of the webserver is failing, that server will be removed from the pool
+</li>
+</ul>
+</li>
+<li>Route 53 will also performs health checks against ELB
+
+</li>
+<li>ELB is region based
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_4" class="foldclosed" onClick="show_folder('1_11_4')" style="POSITION: absolute">+</span> <span id="hide1_11_4" class="foldopened" onClick="hide_folder('1_11_4')">-</span>
+Amazon Route 53
+<ul id="fold1_11_4" style="POSITION: relative; VISIBILITY: visible;"><li>DNS is crutial for any environment
+
+</li>
+<li>Worldwide Distributed DNS
+
+</li>
+<li>More DNS presence than any other provider
+
+</li>
+<li>Route 53 has 100% SLA uptime
+
+</li>
+<li>Route 53 has an API
+
+</li>
+<li><span id="show1_11_4_1" class="foldclosed" onClick="show_folder('1_11_4_1')" style="POSITION: absolute">+</span> <span id="hide1_11_4_1" class="foldopened" onClick="hide_folder('1_11_4_1')">-</span>
+Server Health Checks
+<ul id="fold1_11_4_1" style="POSITION: relative; VISIBILITY: visible;"><li>Health check of public facing Servers
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_5" class="foldclosed" onClick="show_folder('1_11_5')" style="POSITION: absolute">+</span> <span id="hide1_11_5" class="foldopened" onClick="hide_folder('1_11_5')">-</span>
+AWS CloudWatch
+<ul id="fold1_11_5" style="POSITION: relative; VISIBILITY: visible;"><li>AWS Monitoring for systems &amp; billing
+
+</li>
+<li>Basic Monitoring (7 metrics, 5 Minutes)
+
+</li>
+<li>Detailed monitoring (10 alarms, 1 million API requests, 1 min)
+
+</li>
+<li>Set alarms and alerts
+
+</li>
+<li>Notifications via Simple Email Service (SES), Simple Notification Services(SNS)
+
+</li>
+<li>Custom Monitoring through API
+
+</li>
+<li>Integrates with Autoscaling
+
+</li>
+<li>Mobile app for basic monitoring and management
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11_6" class="foldclosed" onClick="show_folder('1_11_6')" style="POSITION: absolute">+</span> <span id="hide1_11_6" class="foldopened" onClick="hide_folder('1_11_6')">-</span>
+Autoscaling
+<ul id="fold1_11_6" style="POSITION: relative; VISIBILITY: visible;"><li><p>Autoscaling provides the capability to expand or shrink your EC2 instance on demand
+<p>Integration with Cloudwatch allows autoscaling to expand or shrink instances based on preset alarm/criteria on Cloudwatch
+<p>Controls by CloudWatch or Manual schedule configuration
+<p>Notifications are available
+<p>It's Free
+</li>
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12" class="foldclosed" onClick="show_folder('1_12')" style="POSITION: absolute">+</span> <span id="hide1_12" class="foldopened" onClick="hide_folder('1_12')">-</span>
+Amazon Database Options, APIs and Lambda
+<ul id="fold1_12" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_12_1" class="foldclosed" onClick="show_folder('1_12_1')" style="POSITION: absolute">+</span> <span id="hide1_12_1" class="foldopened" onClick="hide_folder('1_12_1')">-</span>
+Amazon Database Options
+<ul id="fold1_12_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_12_1_1" class="foldclosed" onClick="show_folder('1_12_1_1')" style="POSITION: absolute">+</span> <span id="hide1_12_1_1" class="foldopened" onClick="hide_folder('1_12_1_1')">-</span>
+Options
+<ul id="fold1_12_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>RDS
+
+</li>
+<li>Non-RDS
+
+</li>
+<li><span id="show1_12_1_1_1" class="foldclosed" onClick="show_folder('1_12_1_1_1')" style="POSITION: absolute">+</span> <span id="hide1_12_1_1_1" class="foldopened" onClick="hide_folder('1_12_1_1_1')">-</span>
+In-Memory
+<ul id="fold1_12_1_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Elasti-Cache
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_1_1_2" class="foldclosed" onClick="show_folder('1_12_1_1_2')" style="POSITION: absolute">+</span> <span id="hide1_12_1_1_2" class="foldopened" onClick="hide_folder('1_12_1_1_2')">-</span>
+Data Warehousing
+<ul id="fold1_12_1_1_2" style="POSITION: relative; VISIBILITY: visible;"><li>Red-Shift
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_1_1_3" class="foldclosed" onClick="show_folder('1_12_1_1_3')" style="POSITION: absolute">+</span> <span id="hide1_12_1_1_3" class="foldopened" onClick="hide_folder('1_12_1_1_3')">-</span>
+Custom
+<ul id="fold1_12_1_1_3" style="POSITION: relative; VISIBILITY: visible;"><li>Install OS and DB
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_1_2" class="foldclosed" onClick="show_folder('1_12_1_2')" style="POSITION: absolute">+</span> <span id="hide1_12_1_2" class="foldopened" onClick="hide_folder('1_12_1_2')">-</span>
+RDS Options
+<ul id="fold1_12_1_2" style="POSITION: relative; VISIBILITY: visible;"><li>Traditonal DB
+
+</li>
+<li>MySQL
+
+</li>
+<li>Oracle
+
+</li>
+<li>Microsoft SQL
+
+</li>
+<li>PostgreSQL
+
+</li>
+<li>Aurora
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_1_3" class="foldclosed" onClick="show_folder('1_12_1_3')" style="POSITION: absolute">+</span> <span id="hide1_12_1_3" class="foldopened" onClick="hide_folder('1_12_1_3')">-</span>
+Non-RDS Options
+<ul id="fold1_12_1_3" style="POSITION: relative; VISIBILITY: visible;"><li>Flat file system
+
+</li>
+<li><span id="show1_12_1_3_1" class="foldclosed" onClick="show_folder('1_12_1_3_1')" style="POSITION: absolute">+</span> <span id="hide1_12_1_3_1" class="foldopened" onClick="hide_folder('1_12_1_3_1')">-</span>
+SimpleDB
+<ul id="fold1_12_1_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>High Available, Very scalable Managed DB service
+
+</li>
+<li>Good for DB that won't grow beyond 10GB
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_1_3_2" class="foldclosed" onClick="show_folder('1_12_1_3_2')" style="POSITION: absolute">+</span> <span id="hide1_12_1_3_2" class="foldopened" onClick="hide_folder('1_12_1_3_2')">-</span>
+DynamoDB
+<ul id="fold1_12_1_3_2" style="POSITION: relative; VISIBILITY: visible;"><li>Very Fast, Very scalable Managed DB service
+
+</li>
+<li>Based on NoSQL/NonSQL
+
+</li>
+<li>Very fast to query and index
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_1_3_3" class="foldclosed" onClick="show_folder('1_12_1_3_3')" style="POSITION: absolute">+</span> <span id="hide1_12_1_3_3" class="foldopened" onClick="hide_folder('1_12_1_3_3')">-</span>
+Mongo DB
+<ul id="fold1_12_1_3_3" style="POSITION: relative; VISIBILITY: visible;"><li>Supported in Custom
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_1_3_4" class="foldclosed" onClick="show_folder('1_12_1_3_4')" style="POSITION: absolute">+</span> <span id="hide1_12_1_3_4" class="foldopened" onClick="hide_folder('1_12_1_3_4')">-</span>
+Couchbase
+<ul id="fold1_12_1_3_4" style="POSITION: relative; VISIBILITY: visible;"><li>Supported in Custom
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_2" class="foldclosed" onClick="show_folder('1_12_2')" style="POSITION: absolute">+</span> <span id="hide1_12_2" class="foldopened" onClick="hide_folder('1_12_2')">-</span>
+Amazon APIs
+<ul id="fold1_12_2" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_12_2_1" class="foldclosed" onClick="show_folder('1_12_2_1')" style="POSITION: absolute">+</span> <span id="hide1_12_2_1" class="foldopened" onClick="hide_folder('1_12_2_1')">-</span>
+API is
+<ul id="fold1_12_2_1" style="POSITION: relative; VISIBILITY: visible;"><li>Application Programming Interface
+
+</li>
+<li>Application-to-Application Communication Method
+
+</li>
+
+</ul>
+</li>
+<li>Almost every AWS service is API capable
+
+</li>
+<li><span id="show1_12_2_2" class="foldclosed" onClick="show_folder('1_12_2_2')" style="POSITION: absolute">+</span> <span id="hide1_12_2_2" class="foldopened" onClick="hide_folder('1_12_2_2')">-</span>
+API Wrappers
+<ul id="fold1_12_2_2" style="POSITION: relative; VISIBILITY: visible;"><li>Android/iOS/.Net/Java/PHP/Ruby/Node.js/Python
+
+</li>
+<li>Wrapper translates programming Language commands into AWS type of command
+
+</li>
+
+</ul>
+</li>
+<li>API authentication
+
+</li>
+
+</ul>
+</li>
+<li>Amazon Lambda
+<ul><li><span id="show1_12_3" class="foldclosed" onClick="show_folder('1_12_3')" style="POSITION: absolute">+</span> <span id="hide1_12_3" class="foldopened" onClick="hide_folder('1_12_3')">-</span>
+Intro
+<ul id="fold1_12_3" style="POSITION: relative; VISIBILITY: visible;"><li>A compute service
+
+</li>
+<li>An event-driven compute service
+
+</li>
+<li>Runs code triggered by event
+
+</li>
+<li>Does not require an instance
+
+</li>
+<li>Does not require an infrastructure
+
+</li>
+<li>Rapid response to events
+
+</li>
+<li>Thousands of function can run in parallel
+
+</li>
+<li>Run only when needed
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_4" class="foldclosed" onClick="show_folder('1_12_4')" style="POSITION: absolute">+</span> <span id="hide1_12_4" class="foldopened" onClick="hide_folder('1_12_4')">-</span>
+Use Cases
+<ul id="fold1_12_4" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_12_4_1" class="foldclosed" onClick="show_folder('1_12_4_1')" style="POSITION: absolute">+</span> <span id="hide1_12_4_1" class="foldopened" onClick="hide_folder('1_12_4_1')">-</span>
+Thumbnail images as soon as an image arrive in an S3 bucket
+<ul id="fold1_12_4_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_12_4_1_1" class="foldclosed" onClick="show_folder('1_12_4_1_1')" style="POSITION: absolute">+</span> <span id="hide1_12_4_1_1" class="foldopened" onClick="hide_folder('1_12_4_1_1')">-</span>
+Before Lambda
+<ul id="fold1_12_4_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Provision a fleet of proxy machines to capture uploads
+
+</li>
+<li>For each upload, enqeuer a job to process it
+
+</li>
+<li>Provision a second fleet of machines to read and process jobs
+
+</li>
+<li>Pick a deployment solution
+
+</li>
+<li>Plan capacity, accounting for FT, long-term utilization and burst capabilities
+
+</li>
+<li>Monitoring and patching
+
+</li>
+<li>Migration to new instance type over time
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li>Check that every address stored in Amazon DynamoDB is well formed
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_5" class="foldclosed" onClick="show_folder('1_12_5')" style="POSITION: absolute">+</span> <span id="hide1_12_5" class="foldopened" onClick="hide_folder('1_12_5')">-</span>
+Event-Driven Compute
+<ul id="fold1_12_5" style="POSITION: relative; VISIBILITY: visible;"><li>Stateless, request-driven code called Lambda functions
+
+</li>
+<li><span id="show1_12_5_1" class="foldclosed" onClick="show_folder('1_12_5_1')" style="POSITION: absolute">+</span> <span id="hide1_12_5_1" class="foldopened" onClick="hide_folder('1_12_5_1')">-</span>
+Triggered by events:
+<ul id="fold1_12_5_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_12_5_1_1" class="foldclosed" onClick="show_folder('1_12_5_1_1')" style="POSITION: absolute">+</span> <span id="hide1_12_5_1_1" class="foldopened" onClick="hide_folder('1_12_5_1_1')">-</span>
+examples of triggers
+<ul id="fold1_12_5_1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Put in S3
+
+</li>
+<li>Write to a DynamoDB table
+
+</li>
+<li>Trasition in an EC2 instance
+
+</li>
+<li>Message in an SQS queue or Kinesis stream
+
+</li>
+<li>Any API call or resource transition
+
+</li>
+
+</ul>
+</li>
+<li>Server-Free Backend
+
+</li>
+<li>Data Triggers
+
+</li>
+<li>IOT
+
+</li>
+<li>Stream Processing
+
+</li>
+<li>Indexing and Synchronization
+
+</li>
+
+</ul>
+</li>
+<li>Connective tissue for AWS services
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_12_6" class="foldclosed" onClick="show_folder('1_12_6')" style="POSITION: absolute">+</span> <span id="hide1_12_6" class="foldopened" onClick="hide_folder('1_12_6')">-</span>
+Amazon Lambda Pricing
+<ul id="fold1_12_6" style="POSITION: relative; VISIBILITY: visible;"><li>$0.2 per 1 million requests
+
+</li>
+<li>0.0000021 execution time in 100ms
+
+</li>
+<li>Memory 100 ms at 128MB
+
+</li>
+<li><span id="show1_12_6_1" class="foldclosed" onClick="show_folder('1_12_6_1')" style="POSITION: absolute">+</span> <span id="hide1_12_6_1" class="foldopened" onClick="hide_folder('1_12_6_1')">-</span>
+Free Tier
+<ul id="fold1_12_6_1" style="POSITION: relative; VISIBILITY: visible;"><li>1 Million requests
+
+</li>
+<li>Upto 3.2 million seconds of execution
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_13" class="foldclosed" onClick="show_folder('1_13')" style="POSITION: absolute">+</span> <span id="hide1_13" class="foldopened" onClick="hide_folder('1_13')">-</span>
+Amazon Simple Services
+<ul id="fold1_13" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_13_1" class="foldclosed" onClick="show_folder('1_13_1')" style="POSITION: absolute">+</span> <span id="hide1_13_1" class="foldopened" onClick="hide_folder('1_13_1')">-</span>
+Simple Email Services (SES)
+<ul id="fold1_13_1" style="POSITION: relative; VISIBILITY: visible;"><li>Cost-effective bulk email service
+
+</li>
+<li>Cost based on number of emails sent
+
+</li>
+<li>Outbound-only email-sending service
+
+</li>
+<li>Leverages Amazon email reputation
+
+</li>
+<li>Initially limited to 10,000 emails/day
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_13_2" class="foldclosed" onClick="show_folder('1_13_2')" style="POSITION: absolute">+</span> <span id="hide1_13_2" class="foldopened" onClick="hide_folder('1_13_2')">-</span>
+Simple Queue Service (SQS)
+<ul id="fold1_13_2" style="POSITION: relative; VISIBILITY: visible;"><li>Fast, reliable and scalable
+
+</li>
+<li>Unlimited messages and queue size
+
+</li>
+<li>Payload up to 256 KB
+
+</li>
+<li>Billed in chunks of 64KB payloads
+
+</li>
+<li>First 1 million requests are free
+
+</li>
+<li>$0.5 / million SQS requests
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_13_3" class="foldclosed" onClick="show_folder('1_13_3')" style="POSITION: absolute">+</span> <span id="hide1_13_3" class="foldopened" onClick="hide_folder('1_13_3')">-</span>
+Simple Notification Service (SNS)
+<ul id="fold1_13_3" style="POSITION: relative; VISIBILITY: visible;"><li>Push messaging service
+
+</li>
+<li>HTTP/HTTPS
+
+</li>
+<li>Email
+
+</li>
+<li>Email-JSON
+
+</li>
+<li>SMS
+
+</li>
+<li>Amazon SQS Queues
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_14" class="foldclosed" onClick="show_folder('1_14')" style="POSITION: absolute">+</span> <span id="hide1_14" class="foldopened" onClick="hide_folder('1_14')">-</span>
+CloudFront, CloudFormation, Elastic Beanstalk and CloudTrail
+<ul id="fold1_14" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_14_1" class="foldclosed" onClick="show_folder('1_14_1')" style="POSITION: absolute">+</span> <span id="hide1_14_1" class="foldopened" onClick="hide_folder('1_14_1')">-</span>
+CloudFront
+<ul id="fold1_14_1" style="POSITION: relative; VISIBILITY: visible;"><li>Global Content Delivery Network (CDN)
+
+</li>
+<li>Leverages all AWS edge locations
+
+</li>
+<li>Cache Static Content
+
+</li>
+<li>Proxy dynamic Information
+
+</li>
+<li>Works with AWS and non-AWS services
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_14_2" class="foldclosed" onClick="show_folder('1_14_2')" style="POSITION: absolute">+</span> <span id="hide1_14_2" class="foldopened" onClick="hide_folder('1_14_2')">-</span>
+CloudFormation
+<ul id="fold1_14_2" style="POSITION: relative; VISIBILITY: visible;"><li>Automates AWS resource provisioning
+
+</li>
+<li>Free Service
+
+</li>
+<li>Deleteing the CloudFormatuon deletes all instances except data
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_14_3" class="foldclosed" onClick="show_folder('1_14_3')" style="POSITION: absolute">+</span> <span id="hide1_14_3" class="foldopened" onClick="hide_folder('1_14_3')">-</span>
+Elastic Beanstalk
+<ul id="fold1_14_3" style="POSITION: relative; VISIBILITY: visible;"><li>More for developers
+
+</li>
+<li>Similar to CloudFormation
+
+</li>
+<li>NodeJS
+
+</li>
+<li>Ruby
+
+</li>
+<li>PHP
+
+</li>
+<li>Python
+
+</li>
+<li>IIS
+
+</li>
+<li>Tomcat
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_14_4" class="foldclosed" onClick="show_folder('1_14_4')" style="POSITION: absolute">+</span> <span id="hide1_14_4" class="foldopened" onClick="hide_folder('1_14_4')">-</span>
+CloudTrail
+<ul id="fold1_14_4" style="POSITION: relative; VISIBILITY: visible;"><li>Record API Calls
+
+</li>
+<li><span id="show1_14_4_1" class="foldclosed" onClick="show_folder('1_14_4_1')" style="POSITION: absolute">+</span> <span id="hide1_14_4_1" class="foldopened" onClick="hide_folder('1_14_4_1')">-</span>
+Log file includes:
+<ul id="fold1_14_4_1" style="POSITION: relative; VISIBILITY: visible;"><li>Identity of API caller
+
+</li>
+<li>Time
+
+</li>
+<li>Source IP address
+
+</li>
+<li>Request Parameter
+
+</li>
+<li>Response elements returns
+
+</li>
+<li>etc...
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_14_4_2" class="foldclosed" onClick="show_folder('1_14_4_2')" style="POSITION: absolute">+</span> <span id="hide1_14_4_2" class="foldopened" onClick="hide_folder('1_14_4_2')">-</span>
+Maintains history
+<ul id="fold1_14_4_2" style="POSITION: relative; VISIBILITY: visible;"><li>Management console
+
+</li>
+<li>SDKs
+
+</li>
+<li>Command line Tools
+
+</li>
+<li>other AWS services
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul><SCRIPT type="text/javascript">
+fold_document();
+</SCRIPT>
+</body>
+</html>
